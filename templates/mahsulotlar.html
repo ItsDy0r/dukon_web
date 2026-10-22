@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Mahsulotlar jadvali</h2>
+
+<div style="text-align:center; margin-bottom:10px;">
+    Tartiblash:
+    <a href="{{ url_for('mahsulotlar', sort='id_asc') }}">ID ↑ (default)</a> |
+    <a href="{{ url_for('mahsulotlar', sort='kategoriya') }}">Kategoriya bo'yicha</a> |
+    <a href="{{ url_for('mahsulotlar', sort='narx_asc') }}">Narx ↑</a> |
+    <a href="{{ url_for('mahsulotlar', sort='narx_desc') }}">Narx ↓</a> |
+    <a href="{{ url_for('mahsulotlar', sort='muddati_asc') }}">Muddati ↑</a> |
+    <a href="{{ url_for('mahsulotlar', sort='muddati_desc') }}">Muddati ↓</a>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Kategoriya</th>
+            <th>Nomi</th>
+            <th>Jami keltirilgan miqdori</th>
+            <th>Muddati</th>
+            <th>Narxi</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for m in mahsulotlar %}
+        <tr>
+            <td>{{ m.mahsulot_id }}</td>
+            <td>{{ m.kategoriya }}</td>
+            <td>{{ m.nomi }}</td>
+            <td>{{ m.jami_keltirilgan_miqdori }}</td>
+            <td>{{ m.muddati }}</td>
+            <td>{{ m.narxi }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

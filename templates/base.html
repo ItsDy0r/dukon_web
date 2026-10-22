@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <title>Dukon bazasi</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #f97316;
+            --bg: #f3f4f6;
+            --card-bg: #ffffff;
+            --text-main: #111827;
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text-main);
+        }
+
+        a {
+            color: inherit;
+        }
+
+        .app-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #fff;
+            padding: 14px 0;
+            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.25);
+        }
+
+        .nav-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+        }
+
+        .brand {
+            font-weight: 600;
+            font-size: 20px;
+            letter-spacing: 0.03em;
+        }
+
+        .brand span {
+            opacity: 0.85;
+            font-weight: 400;
+            font-size: 13px;
+            display: block;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 14px;
+            color: #e5e7eb;
+            border: 1px solid transparent;
+            transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+        }
+
+        .nav-link:hover {
+            background: rgba(15, 23, 42, 0.18);
+            border-color: rgba(15, 23, 42, 0.25);
+            color: #fff;
+        }
+
+        .nav-link-active {
+            background: #fff;
+            color: var(--primary-dark);
+            border-color: rgba(15, 23, 42, 0.08);
+            font-weight: 500;
+        }
+
+        .main {
+            max-width: 1100px;
+            margin: 18px auto 32px;
+            padding: 0 16px;
+        }
+
+        .page-title {
+            margin: 0 0 10px;
+            font-size: 26px;
+            font-weight: 600;
+        }
+
+        .page-subtitle {
+            margin: 0 0 18px;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            padding: 16px 18px;
+            box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+            margin-bottom: 16px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .card-title {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .card-meta {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .btn {
+            border-radius: 6px;
+            border: 1px solid transparent;
+            padding: 6px 14px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--primary);
+            border-color: rgba(37, 99, 235, 0.35);
+        }
+
+        .btn-ghost:hover {
+            background: rgba(37, 99, 235, 0.06);
+        }
+
+        .btn-sm {
+            padding: 4px 10px;
+            font-size: 13px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        thead {
+            background: #f9fafb;
+        }
+
+        th, td {
+            padding: 8px 10px;
+            border-bottom: 1px solid var(--border);
+            text-align: left;
+        }
+
+        th {
+            font-weight: 600;
+            color: #374151;
+            white-space: nowrap;
+        }
+
+        tr:nth-child(even) td {
+            background: #f9fafb;
+        }
+
+        tr:hover td {
+            background: #eff6ff;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 11px;
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+
+        .badge-muted {
+            background: #e5e7eb;
+            color: #4b5563;
+        }
+
+        .pill-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .pill-link {
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            padding: 4px 10px;
+            font-size: 12px;
+            text-decoration: none;
+            color: var(--text-muted);
+            background: #fff;
+            transition: background 0.15s, color 0.15s, border-color 0.15s;
+        }
+
+        .pill-link:hover {
+            background: #eff6ff;
+            border-color: var(--primary);
+            color: var(--primary-dark);
+        }
+
+        .pill-link-active {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+
+        label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 7px 9px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            font-size: 14px;
+            margin: 3px 0 10px;
+            outline: none;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+            background: #f9fafb;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.25);
+            background: #fff;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .form-row > div {
+            flex: 1;
+        }
+
+        .alert {
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .alert-error {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #b91c1c;
+        }
+
+        .alert-success {
+            background: #ecfdf3;
+            border: 1px solid #bbf7d0;
+            color: #166534;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 20px;
+        }
+
+        @media (max-width: 640px) {
+            .nav-inner {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            .form-row {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="app-header">
+        <div class="nav-inner">
+            <div class="brand">
+                Dukon boshqaruvi
+                <span>kassa va hisobotlar</span>
+            </div>
+            <nav class="nav-links">
+                <a href="{{ url_for('index') }}" class="nav-link {% if request.endpoint == 'index' %}nav-link-active{% endif %}">Kassa</a>
+                <a href="{{ url_for('mahsulotlar') }}" class="nav-link {% if request.endpoint == 'mahsulotlar' %}nav-link-active{% endif %}">Mahsulotlar</a>
+                <a href="{{ url_for('xaridorlar') }}" class="nav-link {% if request.endpoint == 'xaridorlar' %}nav-link-active{% endif %}">Xaridorlar</a>
+                <a href="{{ url_for('sotuvlar') }}" class="nav-link {% if request.endpoint == 'sotuvlar' %}nav-link-active{% endif %}">Sotuvlar</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main">
+        {% block content %}{% endblock %}
+        <div class="footer">
+            Dukon ma'lumotlar bazasi · {{ now().strftime('%Y') if now else '' }}
+        </div>
+    </main>
+</body>
+</html>

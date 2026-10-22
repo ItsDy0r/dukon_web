@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Xaridorlar jadvali</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Ism</th>
+            <th>Familiya</th>
+            <th>Tashrif buyurishlar soni</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for x in xaridorlar %}
+        <tr>
+            <td>{{ x.xaridor_id }}</td>
+            <td>{{ x.ism }}</td>
+            <td>{{ x.familiya }}</td>
+            <td>{{ x.tashrif_buyurishlar_soni }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

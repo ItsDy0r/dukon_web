@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Dukon ma'lumotlar bazasi</h1>
+
+{% if error %}
+<p style="color: red; text-align: center;">
+    {{ error }}
+</p>
+{% endif %}
+
+{% if message %}
+<p style="color: green; text-align: center;">
+    {{ message }}
+</p>
+{% endif %}
+
+<form method="post" style="max-width: 700px; margin: 0 auto; border: 1px solid #ccc; padding: 15px; border-radius: 4px;">
+    <h3 style="text-align: center;">Yangi sotuv (bir nechta mahsulot)</h3>
+
+    <label for="ism">Xaridor ismi:</label><br>
+    <input type="text" id="ism" name="ism" required style="width: 100%; margin-bottom: 10px;">
+    <br>
+
+    <label for="familiya">Xaridor familiyasi:</label><br>
+    <input type="text" id="familiya" name="familiya" required style="width: 100%; margin-bottom: 10px;">
+    <br>
+
+    <label for="tulov_usuli">To'lov usuli:</label><br>
+    <select name="tulov_usuli" id="tulov_usuli" required style="width: 100%; margin-bottom: 10px;">
+        <option value="naqd">Naqd</option>
+        <option value="plastik">Plastik karta</option>
+        <option value="pul_otkazma">Pul o'tkazma</option>
+    </select>
+    <br><br>
+
+    <h4>Mahsulotlar:</h4>
+    <table id="mahsulotlar-table" style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr>
+                <th style="border: 1px solid #444; padding: 4px;">Mahsulot</th>
+                <th style="border: 1px solid #444; padding: 4px;">Miqdor</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="border: 1px solid #444; padding: 4px;">
+                    <select name="mahsulot_id" style="width: 100%;">
+                        <option value="">— Tanlang —</option>
+                        {% for m in mahsulotlar %}
+                        <option value="{{ m.mahsulot_id }}" data-price="{{ m.narxi }}">
+                            {{ m.nomi }} (omborda: {{ m.jami_keltirilgan_miqdori }}, narx: {{ m.narxi }})
+                        </option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td style="border: 1px solid #444; padding: 4px;">
+                    <input type="number" name="miqdor" min="1" style="width: 100%;">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <button type="button" onclick="addRow()" style="margin-top: 10px; margin-bottom: 15px;">
+        Yana mahsulot qo'shish
+    </button>
+
+    <!-- Umumiy narxni hisoblash -->
+    <div id="total-container" style="margin-top: 10px; text-align: right; font-weight: bold; font-size: 16px;">
+        Umumiy narx: <span id="total-amount">0</span> so'm
+    </div>
+
+    <br>
+    <button type="submit" id="submit-btn" style="width: 100%; padding: 8px;" disabled>
+        Sotishni tasdiqlash
+    </button>
+</form>
+
+<p style="text-align: center; margin-top: 20px;">
+    Yuqoridagi menyudan boshqa jadvallarni ham ko'rishingiz mumkin.
+</p>
+
+<script>
+function addRow() {
+    var tbody = document.querySelector('#mahsulotlar-table tbody');
+    var firstRow = tbody.querySelector('tr');
+    var newRow = firstRow.cloneNode(true);
+
+    var selects = newRow.querySelectorAll('select');
+    var inputs = newRow.querySelectorAll('input');
+
+    selects.forEach(function(sel) {
+        sel.value = "";
+    });
+
+    inputs.forEach(function(inp) {
+        inp.value = "";
+    });
+
+    tbody.appendChild(newRow);
+    updateTotal();
+}
+
+// Umumiy narxni hisoblash funksiyasi
+function updateTotal() {
+    var total = 0;
+    var rows = document.querySelectorAll('#mahsulotlar-table tbody tr');
+
+    rows.forEach(function(row) {
+        var select = row.querySelector('select[name="mahsulot_id"]');
+        var qtyInput = row.querySelector('input[name="miqdor"]');
+
+        if (!select || !qtyInput) return;
+
+        var selectedOption = select.options[select.selectedIndex];
+        var price = parseFloat(selectedOption ? (selectedOption.getAttribute('data-price') || '0') : '0');
+        var qty = parseInt(qtyInput.value, 10);
+
+        if (!isNaN(price) && !isNaN(qty) && qty > 0 && select.value) {
+            total += price * qty;
+        }
+    });
+
+    var totalSpan = document.getElementById('total-amount');
+    totalSpan.textContent = total.toLocaleString('uz-UZ');
+
+    var submitBtn = document.getElementById('submit-btn');
+    if (submitBtn) {
+        submitBtn.disabled = total <= 0;
+    }
+}
+
+document.addEventListener('input', function(e) {
+    if (e.target.matches('select[name="mahsulot_id"], input[name="miqdor"]')) {
+        updateTotal();
+    }
+});
+document.addEventListener('DOMContentLoaded', function() {
+    updateTotal();
+});
+</script>
+
+{% endblock %}
